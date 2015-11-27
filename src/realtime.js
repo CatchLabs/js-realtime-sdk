@@ -911,6 +911,17 @@ engine.convQuery = function(cache, options) {
       $all: where.m
     };
   }
+
+  // 批量查找 room 信息
+  if (where.roomIds || where.convIds) {
+    where.objectId = {
+      $in: where.roomIds || where.convIds
+    };
+    // 避免对查询项产生干扰
+    delete where.roomIds;
+    delete where.convIds;
+  }
+
   engine.wsSend(cache, {
     cmd: 'conv',
     op: 'query',
